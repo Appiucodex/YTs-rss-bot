@@ -39,9 +39,11 @@ def create_feed_checker(feed_url):
     def check_feed():
         FEED = feedparser.parse(feed_url)
         entry = FEED.entries[0]
+        trnt_url = entry["links"][1]["href"]
         if entry.id != db.get_link(feed_url).link:
                        # ↓ Edit this message as your needs.
-            message = f"**{entry.title}**\n```{entry.link}```"
+             if "yts" in feed_url:           
+                 message = f"/miryts {trnt_url.link}\n\nAdded A Link From YTS\n\n**{entry.title}**\n"
             try:
                 app.send_message(log_channel, message)
                 db.update_link(feed_url, entry.id)
